@@ -9,7 +9,7 @@ __Warning:__ This page contains details of advanced configuration options that e
 
 ## Raspberry Pi
 
-The Raspberry Pi exposes device [configuration options][config-txt] via a text file on the [boot partition][boot-partition] named [`config.txt`][config-txt]. You can change boot options simply by editing this file, either by manually editing before the device's first boot or editing the device [configuration variables][config-vars]. By default, the following values are set for Raspberry Pi devices:
+The Raspberry Pi exposes device [configuration options][config-txt] via a text file on the [boot partition][boot-partition] named [`config.txt`][config-txt]. You can change boot options in this file, either by manually editing it before the device's first boot or editing the device [configuration variables][config-vars]. By default, the following values are set for Raspberry Pi devices:
 
 {{> "general/config-variables-pi" }}
 
@@ -22,7 +22,7 @@ $ cat /mnt/boot/config.txt
 
 ### Modifying `config.txt` locally before the first boot
 
-Before the device is [provisioned][device-provisioning], you may edit `config.txt` by mounting a flashed SD card (with the partition label `resin-boot`) and editing the file directly. This will only work if you edit the file before the device's first boot as after device provisioning, any changes will be overwritten by the device supervisor with values read from the {{ $names.cloud.lower }} API.
+Before the device is [provisioned][device-provisioning], you may edit `config.txt` by mounting a flashed SD card (with the partition label `resin-boot`) and editing the file directly. This will only work if you edit the file before the device's first boot, as after device provisioning any changes will be overwritten by the device supervisor with values read from the {{ $names.cloud.lower }} API.
 
 ### Modifying `config.txt` using configuration variables
 
@@ -50,15 +50,16 @@ __Note:__ In addition to the dashboard, these configuration variables can be als
 
 ### GPU Memory
 
-The [amount of memory][gpu-memory] that is addressable from the GPU my be configured by adding entries to `config.txt`. You can target different memory sizes, specified in MB, of 256, 512, and 1024 corresponding to the RAM on the Raspberry Pi. Values will be ignored for those devices whose memory size does not match. For the Raspberry Pi 4, which has versions with RAM greater than 1GB, the minimum and maximum values are the same as for a 1GB device.
+The [amount of memory][gpu-memory] that is addressable from the GPU my be configured by adding entries to `config.txt`. You can also set specific values of `gpu_mem` for Raspberry Pis with 256, 512 or 1024 MB (or greater) of RAM. Values will be ignored for those devices whose memory size does not match. For the Raspberry Pi 4, which has versions with RAM greater than 1GB, the minimum and maximum values are the same as for a 1GB device.
 
 ```
+gpu_mem=16
 gpu_mem_256=64
 gpu_mem_512=128
 gpu_mem_1024=256
 ```
 
-`gpu_mem` is the default amount of memory, which, by default, is set to 16MB (specified by `gpu_mem=16`). This may well be less than you require depending on your application (particularly applications that make heavy use of the Raspberry Pi's graphics card). As per the [Raspberry Pi documentation][gpu-memory], values of `gpu_mem` over 512 are not recommended, will provide no performance improvements, and are untested.
+`gpu_mem` is the default amount of memory, which, by default, is set to 16MB (specified by `gpu_mem=16`). This may well be less than you require depending on your application (particularly applications that make heavy use of the Raspberry Pi's graphics capabilities). As per the [Raspberry Pi documentation][gpu-memory], values of `gpu_mem` over 512 are not recommended, will provide no performance improvements, and are untested.
 
 ### Enable serial interface
 
@@ -118,10 +119,6 @@ To disable the Raspberry Pi rainbow splash screen, add the `disable_splash=1` en
 
 __Note:__ This setting disables the Raspberry Pi rainbow splash screen but does not disable the {{ $names.company.lower }} logo splash screen. If you would like to replace the {{ $names.company.lower }} logo with your custom splash logo, replace `splash/resin-logo.png` located in the [boot partition][boot-partition] of the image.
 
-### Further Reading
-
-There are more details on the options available in `config.txt` over at [elinux's RPi Config page][elinux].
-
 [boot-partition]:/reference/OS/overview/2.x/#image-partition-layout
 [cli]:/reference/cli/reference/balena-cli/#envs
 [config-txt]:https://www.raspberrypi.org/documentation/configuration/config-txt/
@@ -129,8 +126,7 @@ There are more details on the options available in `config.txt` over at [elinux'
 [config-vars-fleet]:/learn/manage/configuration/#managing-fleet-configuration-variables
 [config-vars-device]:/learn/manage/configuration/#managing-device-configuration-variables
 [device-provisioning]:/learn/welcome/primer/#device-provisioning
-[device-tree-overlay]:https://github.com/raspberrypi/linux/blob/rpi-4.1.y/arch/arm/boot/dts/overlays/README
-[elinux]:http://elinux.org/RPiconfig
+[device-tree-overlay]:https://github.com/raspberrypi/linux/blob/rpi-4.19.y/arch/arm/boot/dts/overlays/README
 [gpu-memory]:https://www.raspberrypi.org/documentation/configuration/config-txt/memory.md
 [sdk]:/reference/sdk/node-sdk
 [uart]:https://www.raspberrypi.org/documentation/configuration/uart.md
