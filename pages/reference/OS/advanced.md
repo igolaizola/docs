@@ -22,7 +22,7 @@ $ cat /mnt/boot/config.txt
 
 ### Modifying `config.txt` locally before the first boot
 
-Before the device is [provisioned][device-provisioning], you may edit `config.txt` by mounting a flashed SD card (with the partition label `resin-boot`) and editing the file directly. This will only work if you edit the file before the device's first boot, as after device provisioning any changes will be overwritten by the device supervisor with values read from the {{ $names.cloud.lower }} API.
+Before the device is [provisioned][device-provisioning], you may edit `config.txt` by mounting a flashed SD card (with the partition label `resin-boot`) and editing the file directly. Any values added to `config.txt` will be added to the dashboard during device provisioning. This will only work if you edit the file before the device's first boot, as after device provisioning, any changes will be overwritten by the device supervisor with values read from the {{ $names.cloud.lower }} API.
 
 ### Modifying `config.txt` using configuration variables
 
@@ -50,7 +50,7 @@ __Note:__ In addition to the dashboard, these configuration variables can be als
 
 ### GPU Memory
 
-The [amount of memory][gpu-memory] that is addressable from the GPU my be configured by adding entries to `config.txt`. You can also set specific values of `gpu_mem` for Raspberry Pis with 256, 512 or 1024 MB (or greater) of RAM. Values will be ignored for those devices whose memory size does not match. For the Raspberry Pi 4, which has versions with RAM greater than 1GB, the minimum and maximum values are the same as for a 1GB device.
+The [amount of memory][gpu-memory] that is addressable from the GPU may be configured by adding entries to `config.txt`. You can also set specific values of `gpu_mem` for Raspberry Pis with 256, 512, or 1024 MB (or greater) of RAM. Values will be ignored for those devices whose memory size does not match. For the Raspberry Pi 4, which has versions with RAM greater than 1GB, the minimum and maximum values are the same as for a 1GB device.
 
 ```
 gpu_mem=16
@@ -68,7 +68,7 @@ The BCM2837 on the Raspberry Pi 3 has 2 built-in [UARTs][uart] (as did its prede
 This has a number of consequences for users of the serial interface:
 
 - The /dev/ttyAMA0 previously used to access the UART now connects to Bluetooth.
-- The mini UART is now available on /dev/ttyS0, disabled by default.
+- The mini UART is now available on /dev/ttyS0. This is disabled by default for [production images][image-variants] and enabled by default for [development images][image-variants].
 - The mini UART is a secondary low throughput UART intended to be used as a console. it supports the following functionality:
   - 7 or 8 bit operation.
   - 1 start and 1 stop bit.
@@ -80,7 +80,7 @@ This has a number of consequences for users of the serial interface:
   - 16550 like registers.
   - Baudrate derived from system clock.
 
-To enable the mini UART, an entry should be added to `config.txt` as follows:
+The mini UART is enabled by default for development images. For production images either enable it via [configuration variables][config-vars] or before device provisioning by adding the following entry to `config.txt`:
 
 ```
 enable_uart=1
@@ -128,5 +128,6 @@ __Note:__ This setting disables the Raspberry Pi rainbow splash screen but does 
 [device-provisioning]:/learn/welcome/primer/#device-provisioning
 [device-tree-overlay]:https://github.com/raspberrypi/linux/blob/rpi-4.19.y/arch/arm/boot/dts/overlays/README
 [gpu-memory]:https://www.raspberrypi.org/documentation/configuration/config-txt/memory.md
+[image-variants]:/reference/OS/overview/2.x/#variants-of-balenaos
 [sdk]:/reference/sdk/node-sdk
 [uart]:https://www.raspberrypi.org/documentation/configuration/uart.md
