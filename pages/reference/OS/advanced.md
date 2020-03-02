@@ -80,11 +80,13 @@ This has a number of consequences for users of the serial interface:
   - 16550 like registers.
   - Baudrate derived from system clock.
 
-The mini UART is enabled by default for development images. For production images either enable it via [configuration variables][config-vars] or before device provisioning by adding the following entry to `config.txt`:
+The mini UART is enabled by default for development images. For production images either enable it using [configuration variables][config-vars] or before device provisioning by adding the following entry to `config.txt`:
 
 ```
 enable_uart=1
 ```
+
+__Note:__ For further information on UART device tree overlays, see the [Raspberry Pi documentation][uart].
 
 ### Setting device tree overlays (`dtoverlay`) and parameters (`dtparam`)
 
